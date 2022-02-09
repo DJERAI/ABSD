@@ -69,7 +69,7 @@ namespace WindowsFormsApp1
             //Вызываем метод получения записей, который вновь заполнит таблицу
             GetListCar();
         }
-        public bool DeleteCar(string idCar,string idMarka,string idModel, string NumberTS)
+        public bool DeleteCar()
         {
             //определяем переменную, хранящую количество вставленных строк
             int InsertCount = 0;
@@ -78,21 +78,15 @@ namespace WindowsFormsApp1
             // открываем соединение
             conn.Open();
             // запрос удаления данных
-            string query = $"DELETE idCar FROM t_Cars WHERE idCar='{idCar}'";
-            string query2 = $"DELETE idMarka FROM t_Marka WHERE (idMarka='{idMarka}')";
-            string query3 = $"DELETE idModel FROM t_Model WHERE (idModel='{idModel}')";
-            string query4 = $"DELETE NumberTS FROM t_Cars WHERE (NumberTS='{NumberTS}')";
+            string query = $"DELETE idCar, idTarif, idModel, idMarka, NumberTS FROM t_Cars ";
+          
             try
             { 
             MySqlCommand command = new MySqlCommand(query, conn);
-            MySqlCommand command1 = new MySqlCommand(query2, conn);
-            MySqlCommand command2 = new MySqlCommand(query3, conn);
-                MySqlCommand command3 = new MySqlCommand(query4, conn);
+           
                 // выполняем запрос
                 InsertCount = command.ExecuteNonQuery();
-            InsertCount = command1.ExecuteNonQuery();
-            InsertCount = command2.ExecuteNonQuery();
-                InsertCount = command3.ExecuteNonQuery();   
+              
             }
             catch
             {
@@ -175,7 +169,7 @@ namespace WindowsFormsApp1
             //ID конкретной записи в Базе данных, на основании индекса строки
             id_selected_rows = dataGridView1.Rows[Convert.ToInt32(index_selected_rows)].Cells[0].Value.ToString();
             dataGridView1.Rows.RemoveAt(Convert.ToInt32(index_rows5));
-            DeleteCar(idCar,idMarka,idModel,NumberTS);
+            DeleteCar();
         }
 
         private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -187,16 +181,7 @@ namespace WindowsFormsApp1
                 dataGridView1.CurrentRow.Selected = true;
 
                 index_rows5 = dataGridView1.SelectedCells[0].RowIndex.ToString();
-                                
-                idCar = dataGridView1.Rows[Convert.ToInt32(index_rows5)].Cells[0].Value.ToString();
-
-                idMarka = dataGridView1.Rows[Convert.ToInt32(index_rows5)].Cells[1].Value.ToString();
-
-                idModel = dataGridView1.Rows[Convert.ToInt32(index_rows5)].Cells[2].Value.ToString();
-
-                NumberTS = dataGridView1.Rows[Convert.ToInt32(index_rows5)].Cells[3].Value.ToString();
-
-               GetSelectedIDString();
+                GetSelectedIDString();
 
             }
         }
@@ -210,9 +195,9 @@ namespace WindowsFormsApp1
             conn.Open();
             // запросы
             // запрос вставки данных
-            string query = $"INSERT INTO t_Marka (titleMarks) VALUES ('{Marka}')";
-            string query1 = $"INSERT INTO t_Model (titleModel) VALUES ('{Model}')";
-            string query2 = $"INSERT INTO t_Cars (NumberTS) VALUES ('{Number}')";
+            string query = $"INSERT INTO t_Marka (titleMarks) VALUES ('{Marka}');";
+            string query1 = $"INSERT INTO t_Model (titleModel) VALUES ('{Model}');";
+            string query2 = $"INSERT INTO t_Cars (NumberTS) VALUES ('{Number}');";
            
             
             try
